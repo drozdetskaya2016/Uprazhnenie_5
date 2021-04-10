@@ -1,0 +1,48 @@
+---
+title: "Упражнение №5"
+author: "Дроздецкая Анна"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: 
+  html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Вариант - 6
+
+1. Картограмма с таблицей стран мира по показателю из базы Всемирного банка (интерактивная картограмма из примера).
+2. Карта с маркерами или с радиусами, построенная по набору данных с Портала открытых данных РФ.
+
+WDI: любой показатель из раздела "Energy & Mining" (Энергетика и добывающие отрасли). Портал открытых данных: Адресный перечень многоквартирных домов, вошедших в региональную программу Капитальный ремонт общего имущества в многоквартирных домах, расположенных на территории Волгоградской области (id: 3460012716-zhkhregistryoverhaul), взять только расположенные в городе Калач-на-Дону
+
+Показатель: Access to electricity (% of population)
+
+```{r, results='asis', cache=TRUE, warning=F, message=F}
+library(leaflet)
+fileURL <-'./data/home.png'
+pharm.icon <- makeIcon(iconUrl = fileURL,
+                      iconWidth = 31,
+                      iconHeight = 31,
+                      iconAnchorX = 31,
+                      iconAnchorY = 31)
+
+fileURL <- './data/RF.csv'
+doc <- read.csv2(fileURL, stringsAsFactors = F)
+
+doc$lat <- as.numeric(doc$lat)
+doc$long <- as.numeric(doc$long)
+
+# Подпись к объектам
+map.sites <- paste0(doc$Municipality, '</br>',
+                    doc$Year2, '</br>',
+                    doc$Wall,'</br>',
+                    '<em>', doc$TotalArea1, '</em>')
+
+# Создаем виджет с картой
+myMap <- doc %>% leaflet(width =800, height =800) %>%
+  addTiles() %>% addMarkers(icon = pharm.icon, popup = map.sites)
+
+myMap
+```
