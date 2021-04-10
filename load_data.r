@@ -1,5 +1,10 @@
 # Загрузка данные с WDI и Портала открытых данных РФ
-
+library('httr')
+library('jsonlite')
+library('XML')
+library('RCurl')
+library('WDI')
+library('data.table')
 # Загрузка с WDI, показатель Доступ к электричеству (% населения)
 indicator.code <- 'EG.ELC.ACCS.ZS'
 
